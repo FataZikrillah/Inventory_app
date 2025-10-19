@@ -22,4 +22,9 @@ class VarianProduk extends Model
         $nomorSku = $prefix . str_pad($maxId + 1, 6, '0', STR_PAD_LEFT);
         return $nomorSku;
     }
+
+    public function produk()
+    {
+        return $this->belongsTo(Produk::class);
+    }
 }

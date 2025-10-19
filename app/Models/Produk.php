@@ -15,6 +15,8 @@ class Produk extends Model
          return $this->belongsTo(KategoriProduk::class, 'kategori_produk_id');
     }
 
+
+    // relasi ke tabel varian produk --> jadi 1 produk itu punya banyak varian
     public function varian() {
         return $this->hasMany(VarianProduk::class, 'produk_id');
     }

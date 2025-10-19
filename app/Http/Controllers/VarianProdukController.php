@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\storeVarianProdukRequest;
 use App\Http\Requests\updateVarianProdukRequest;
+use App\Models\KartuStok;
+use Illuminate\Support\Facades\Auth;
 
 class VarianProdukController extends Controller
 {
@@ -35,7 +37,14 @@ class VarianProdukController extends Controller
     }
 
     public function update(updateVarianProdukRequest $request, $varian_produk) {
+
+        $isAdjusment = false;
         $varian = VarianProduk::findOrFail($varian_produk);
+        
+        if ($request->stok_varian != $varian->stok_varian) {
+            $isAdjusment = true;
+        }
+        
         $fileName = $varian->gambar_varian;
 
         // 
@@ -52,6 +61,15 @@ class VarianProdukController extends Controller
             'stok_varian' => $request->stok_varian,
             'gambar_varian' => $fileName,
         ]);
+
+        if ($isAdjusment) {
+            KartuStok::create([
+                'jenis_transaksi' => 'adjustment',
+                'nomor_sku' => $varian->nomor_sku,
+                'stok_akhir' => $varian->stok_varian,
+                'petugas' => Auth::user()->name,
+            ]);
+        }
 
         return response()->json([
             'message' => 'Berhasil mengupdate varian produk'
