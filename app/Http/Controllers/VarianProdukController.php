@@ -36,15 +36,16 @@ class VarianProdukController extends Controller
         // return redirect()->route('master-data.produk.show', $request->produk_id);
     }
 
-    public function update(updateVarianProdukRequest $request, $varian_produk) {
+    public function update(updateVarianProdukRequest $request, $varian_produk)
+    {
 
         $isAdjusment = false;
         $varian = VarianProduk::findOrFail($varian_produk);
-        
+
         if ($request->stok_varian != $varian->stok_varian) {
             $isAdjusment = true;
         }
-        
+
         $fileName = $varian->gambar_varian;
 
         // 
@@ -76,11 +77,37 @@ class VarianProdukController extends Controller
         ]);
     }
 
-    public function destroy($varian_produk) {
+    public function destroy($varian_produk)
+    {
         $varian = VarianProduk::findOrFail($varian_produk);
         Storage::disk('public')->delete('varian-produk/' . $varian->gambar_varian);
         $varian->delete();
         toast()->success('Berhasil menghapus varian produk');
         return redirect()->route('master-data.produk.show', $varian->produk_id);
+    }
+
+
+    // 
+    public function getAllVarianJson()
+    {
+        $search = request()->query('search');
+
+        $varians = VarianProduk::with('produk')
+            ->where(function ($query) use ($search) {
+                $query->where('nama_varian', 'like', '%' . $search . '%')
+                    ->orWhere('nomor_sku', 'like', '%' . $search . '%')
+                    ->orWhereHas('produk', function ($query) use ($search) {
+                        $query->where('nama_produk', 'like', '%' . $search . '%');
+                    });
+            })->get()->map(function ($q) {
+                return [
+                    'id' => $q->id,
+                    'text' => $q->produk->nama_produk . ' - ' . $q->nama_varian,
+                    'harga' => $q->harga_varian,
+                    'stok' => $q->stok_varian,
+                    'nomor_sku' => $q->nomor_sku,
+                ];
+            });
+        return response()->json($varians);
     }
 }

@@ -36,6 +36,8 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/css/plugins.min.css" />
     <link rel="stylesheet" href="{{ asset('assets') }}/css/kaiadmin.min.css" />
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{{ asset('assets') }}/css/demo.css" />
 </head>
@@ -54,8 +56,8 @@
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
                         <a href="index.html" class="logo">
-                            <img src="{{ asset('assets') }}/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand"
-                                height="20" />
+                            <img src="{{ asset('assets') }}/img/kaiadmin/logo_light.svg" alt="navbar brand"
+                                class="navbar-brand" height="20" />
                         </a>
                         <div class="nav-toggle">
                             <button class="btn btn-toggle toggle-sidebar">
@@ -92,8 +94,8 @@
                                         <li>
                                             <div class="user-box">
                                                 <div class="avatar-lg">
-                                                    <img src="{{ asset('assets') }}/img/profile.jpg" alt="image profile"
-                                                        class="avatar-img rounded" />
+                                                    <img src="{{ asset('assets') }}/img/profile.jpg"
+                                                        alt="image profile" class="avatar-img rounded" />
                                                 </div>
                                                 <div class="u-text">
                                                     <h4>{{ auth()->user()->name }}</h4>
@@ -337,6 +339,8 @@
         }
         // ]]>
     </script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     @stack('script')
 </body>
 
